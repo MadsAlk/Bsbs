@@ -1,0 +1,12 @@
+0 s20
+1 s50
+2 s100
+3 s10
+4 s1
+5 s05
+6 s2
+7 s200
+8 s5
+9 blank
+10 rPIboxndReceipt
+11 textPaper
