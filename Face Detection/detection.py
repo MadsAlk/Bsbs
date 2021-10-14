@@ -82,6 +82,7 @@ def detect():
                 if currentname != name:
                     currentname = name
                     print(currentname)
+                    return currentname
             
             # update the list of names
             names.append(name)
