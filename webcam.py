@@ -1,12 +1,82 @@
-import cv2
-import prediction
-import socket
+# import cv2
+# import prediction
+# import socket
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
+
 from time import sleep
-# ip = "192.168.1.29"
+
+cred = credentials.Certificate('firebase_credentials.json')
+firebase_admin.initialize_app(cred,{
+    'databaseURL' : 'https://bsbs-2854d-default-rtdb.europe-west1.firebasedatabase.app/'
+})
+def update_balance(uid, balance):
+    prev_balance = db.reference('Customer').child(uid).child('balance').get()
+    balance+= prev_balance
+    db.reference('Customer').child(uid).update({
+        'balance': balance,
+    })
+'''
+#Creating the database and adding content
+ref = db.reference('/')
+ref.set({
+    'Customer':
+        {
+            '1181638' : {
+                'fname' : 'Ahmad',
+                'lname' : 'AlKhaldi',
+                'balance' : 0.0,
+                'year' : 2000,
+                'month' : 10,
+                'day' : 22,
+                'city' : 'Jenin'
+            },
+            '1182972' : {
+                'fname' : 'Abdallah',
+                'lname' : 'Afifi',
+                'balance' : 0.0,
+                'year' : 2000,
+                'month' : 6,
+                'day' : 19,
+                'city' : 'Jerusalem'
+            }
+        }
+})
+'''
+'''
+#Updating the database content:
+ref = db.reference('Customer')
+cust_ref = ref.child('Ahmad')
+cust_ref.update({
+    'balance' : 2.5
+})
+'''
+'''
+#Adding a new Customer
+ref = db.reference('Customer')
+ref.child("test").set({
+            'lname' : 'Jabsheh',
+            'id' : '1182932',
+            'balance' : 0.0,
+            'year' : 2000,
+            'month' : 8,
+            'day' : 11,
+            'city' : 'Jerusalem'
+    })
+'''
+'''
+#deleting data
+ref = db.reference('Customer').child('test')
+ref.delete()
+'''
+'''
+
+ip = "192.168.1.29"
 #
-# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client.connect((ip, 8080))
-# print("Client: Connected")
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((ip, 8080))
+print("Client: Connected")
 
 def screenshot():
     global cam
@@ -22,10 +92,16 @@ with open('labels.txt','r') as f:
 		m=listl.append(listli)
 	print(listl)
 
-cam = cv2.VideoCapture(0)
+# cam = cv2.VideoCapture(1)
+
 
 while True:
-    sleep(1)
+    # sleep(1)
+    cam.release()
+    from_server = client.recv(4096).decode()
+    while from_server.split()[0] != "detected":
+        from_server = client.recv(4096).decode()
+    cam = cv2.VideoCapture(1)
     ret, img = cam.read()
 
     cv2.imshow('My camera',img)
@@ -43,3 +119,7 @@ while True:
 
 
 cv2.destroyAllWindows()
+
+
+
+'''
