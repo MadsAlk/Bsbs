@@ -24,7 +24,7 @@ def detect():
     print("Starting Pi Camera stream...")
     # vs = VideoStream(src=0).start()
     vs = VideoStream(usePiCamera=True).start()
-    time.sleep(2.0)
+    time.sleep(5.0)
 
     # start the Frame per Second (FPS) counter
     fps = FPS().start()
@@ -82,6 +82,8 @@ def detect():
                 if currentname != name:
                     currentname = name
                     print(currentname)
+                    cv.destroyAllWindows()
+                    vs.stop()
                     return currentname
             
             # update the list of names
