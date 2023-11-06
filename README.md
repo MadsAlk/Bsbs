@@ -19,3 +19,10 @@
   <li><strong>Real-time Storage:</strong> Money deposits and account updates are managed using Firebase Realtime Database. Users can check their account balance and transaction history in real-time.</li>
   <li><strong>Socket Programming:</strong> The system leverages socket programming to establish communication between the Raspberry Pi and the user's PC. This ensures a user-friendly and efficient experience.</li>
 </ul>
+
+<div style="display: flex;">
+  
+  <img src="screenshots/tv.PNG" alt="MAP" width="300" style="margin-right: 10px;">
+  <img src="screenshots/db.PNG" alt="DESC" width="300" style="margin-right: 10px;">
+  <img src="screenshots/pi.PNG" alt="IMG" width="300" style="margin-right: 10px;">
+</div>
