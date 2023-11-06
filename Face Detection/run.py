@@ -32,7 +32,7 @@ def register():
 
 
 
-ip = "192.168.1.12"  # IP of Raspberry Pi
+ip = "192.168.1.5" #"192.168.1.12"  IP of Raspberry Pi
 
 # # start server
 serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -46,25 +46,31 @@ while True:
     recieved_msg = ''
     print("SERVER: connection to Client established")
 
-    # while True:
-    # receive data and print
+
     data = conn.recv(4096).decode()
-    # if not data: break
-    if not data:
+    while not data:
+        print("XXX didnt recieve data from conn XXX")
         sleep(1)
         data = conn.recv(4096).decode()
-    # recieved_msg += data
-    recieved_msg = data
-    print("Recieved: ", recieved_msg)
 
-    if recieved_msg == 'connected':
-        print(recieved_msg)
+    print("Recieved: ", data)
+
+    # if recieved_msg == 'connected':
+    #     print(recieved_msg)
     
     
     print("Welcome to Bsbs, enter:")
     print("1: if your have an account")
     print("2: if you are a new user")
-    user = int(input())
+
+
+    try:
+        user = int(input("Please enter an integer: "))
+    except ValueError:
+        print("Invalid input. Please enter an integer.")
+        user = 1
+
+
     if user == 1:
         id = detect()
     else:

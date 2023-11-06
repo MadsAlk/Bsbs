@@ -21,9 +21,9 @@ def detect():
     data = pickle.loads(open(encodingsP, "rb").read())
     detector = cv.CascadeClassifier(cascade)
 
-    print("Starting Pi Camera stream...")
-    # vs = VideoStream(src=0).start()
-    vs = VideoStream(usePiCamera=True).start()
+    print("Starting Camera stream...")
+    vs = VideoStream(src=0).start()
+    # vs = VideoStream(usePiCamera=True).start()
     time.sleep(5.0)
 
     # start the Frame per Second (FPS) counter
@@ -32,6 +32,14 @@ def detect():
     while True:
         # Get the frame from the video stream and resize it to speedup processing
         frame = vs.read()
+        while frame is None:
+            vs = VideoStream(src=0).start()
+            time.sleep(1.0)
+            print("FAILED TO TAKE PIC")
+            frame = vs.read()
+            
+
+        # frame = vs.read()
         frame = imutils.resize(frame, width=500)
         
         # convert frame from BGR to grayscale for face detection
@@ -40,9 +48,7 @@ def detect():
         rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
         # detect faces in the grayscale frame
-        rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
-            minNeighbors=5, minSize=(30, 30),
-            flags=cv.CASCADE_SCALE_IMAGE)
+        rects = detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags=cv.CASCADE_SCALE_IMAGE)
 
         # OpenCV returns bounding box coordinates in (x, y, w, h) order
         # but we need them in (top, right, bottom, left) order

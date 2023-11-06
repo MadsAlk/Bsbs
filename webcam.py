@@ -81,10 +81,10 @@ ref.delete()
 '''
 
 
-ip = "192.168.1.12"
+ip = "192.168.1.5"
 #
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((ip, 8080))
+client.connect((ip, 8081))
 msg = "connected"
 client.send(msg.encode())
 print("Client: Connected")
@@ -100,39 +100,45 @@ with open('labels.txt','r') as f:
 		m=listl.append(listli)
 	print(listl)
 
-cam = cv2.VideoCapture(1)
+cam = cv2.VideoCapture(0)
 
 
-while True:
-    sleep(1)
-    cam.release()
+
+sleep(1)
+cam.release()
+from_server = client.recv(4096).decode()
+while from_server.split()[0] != "detected":
     from_server = client.recv(4096).decode()
-    while from_server.split()[0] != "detected":
-        from_server = client.recv(4096).decode()
-    id = int(from_server.split[1])
+    
+    
+print(from_server)
+id = int(from_server.split()[1])
 
-    print("Please Enter The Money you want to Enter, and After Each Entry Press \'Space\'")
-    print("Press \'ESC\' When You Are Done")
-    cam = cv2.VideoCapture(1)
-    ret, img = cam.read()
+print("Please Enter The Money you want to Enter, and After Each Entry Press \'Space\'")
+print("Press \'ESC\' When You Are Done")
+cam = cv2.VideoCapture(0)
+ret, img = cam.read()
 
-    cv2.imshow('My camera',img)
-    while True:
-        ch = cv2.waitKey(5)
-        if ch == 27:    #ESC
-            break
-        elif ch == 32:  #SPACE
-            screenshot()
-        result = prediction.predict('screenshot.png')
+cv2.imshow('My camera',img)
+while True:
+    ch = cv2.waitKey(10000)
+    print(ch)
+    if ch == 27:    #ESC
+        break
+    elif ch == 32:  #SPACE
+        screenshot()
+    else:
+        continue
+    result = prediction.predict('screenshot.png')
 
-        if(listl[result][1] in {'s05','s1','s2','s5','s10','s20','s50','s100','s200'}):
-            update_balance(id,convert_to_money(listl[result][1]))
-        else:
-            print("Invalid Curreny, Please Try Again")
-    print("Thank  You For Using Our Banking System, Have a Nice Day!")
+    if(listl[result][1] in {'s05','s1','s2','s5','s10','s20','s50','s100','s200'}):
+        print("added", listl[result][1])
+        update_balance(str(id),convert_to_money(listl[result][1]))
+    else:
+        print("Invalid Curreny, Please Try Again")
+print("Thank  You For Using Our Banking System, Have a Nice Day!")
 
 
 cv2.destroyAllWindows()
 
 client.close()
-
