@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Smart Money Storage System</title>
+
 </head>
 <body>
 
